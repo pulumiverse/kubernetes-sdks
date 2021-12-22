@@ -57,7 +57,7 @@ jobs:
 
           # Fix Package Version
           sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[3]}\"#g" ../output/package.json
-      - run: npm publish
+      - run: npm publish --access=public
         working-directory: ./_work/output
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
