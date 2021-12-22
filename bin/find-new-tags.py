@@ -38,6 +38,7 @@ with open("./sdks.yaml", "r") as stream:
 sdks_to_build: List[str] = []
 for sdk in sdks:
     for tag in get_new_tags(sdk):
-        sdks_to_build.append(f'{sdk["name"]}|{sdk["repository"]}|{tag}')
+        sdks_to_build.append(
+            f'{sdk["name"]}|{sdk["repository"]}|{sdk["directory"]}|{tag}')
 
 print(dumps(sdks_to_build, indent=2))

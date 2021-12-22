@@ -1,0 +1,52 @@
+name: Build SDKs
+
+on:
+  schedule:
+    - cron: "10 3,15 * * *"
+
+jobs:
+  find_new_tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: setup_poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.12
+
+      - name: find_new_tags
+        run: echo "::set-output name=matrix::$(poetry run python ./bin/find-new-tags.py)"
+
+    outputs:
+      matrix: ${{ steps.find_new_tags.outputs.matrix }}
+
+  build_nodejs_sdk:
+    needs: find_new_tags
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.find_new_tags.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: crd2pulumi-install
+        run: brew install pulumi/tap/crd2pulumi
+      - name: crd2pulumi-generate-sdk
+        run: |
+          IFS='|' read -r -a build_parts <<< "${version}"
+          mkdir -p _work/${build_parts[1]}/{clone,output}
+          git clone ${build_parts[2]} ./_work/${build_parts[1]}/clone
+          cd ./_work/${build_parts[1]}/clone
+          git checkout ${build_parts[4]}
+          crd2pulumi --nodejsName ${build_parts[1]} --nodejsPath ../output ./${build_parts[3]}/*.yaml --force
+
+          # Fix Package Name
+          sed -ie "s#@pulumi/${build_parts[1]}#@pulumiverse/${build_parts[1]}#g" ../output/package.json
+
+          # Fix Package Version
+          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[4]}\"#g" ../output/package.json
