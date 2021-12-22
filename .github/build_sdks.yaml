@@ -1,0 +1,26 @@
+name: Build SDKs
+
+on:
+  schedule:
+    - cron: "10 3,15 * * *"
+
+jobs:
+  find_new_tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: setup_poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.12
+
+      - name: find_new_tags
+        run: echo "::set-output name=matrix::$(poetry run python ./bin/find-new-tags.py)"
+
+    outputs:
+      matrix: ${{ steps.find_new_tags.outputs.matrix }}
