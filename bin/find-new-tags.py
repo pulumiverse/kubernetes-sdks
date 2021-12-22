@@ -41,4 +41,4 @@ for sdk in sdks:
         sdks_to_build.append(
             f'{sdk["name"]}|{sdk["repository"]}|{sdk["directory"]}|{tag}')
 
-print(dumps(sdks_to_build, indent=2))
+print(dumps(sdks_to_build))

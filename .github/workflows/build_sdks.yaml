@@ -24,7 +24,7 @@ jobs:
         run: poetry install
 
       - name: find_new_tags
-        run: echo '::set-output name=sdk_versions::$(poetry run python ./bin/find-new-tags.py)'
+        run: echo "::set-output name=sdk_versions::$(poetry run python ./bin/find-new-tags.py)"
 
     outputs:
       sdk_versions: ${{ steps.find_new_tags.outputs.sdk_versions }}
