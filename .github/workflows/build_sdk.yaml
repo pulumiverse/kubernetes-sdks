@@ -1,0 +1,65 @@
+name: Build SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Which version?
+        required: true
+
+jobs:
+  find_new_tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: setup_poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.12
+
+      - name: poetry-install
+        run: poetry install
+
+      - id: find_new_tags
+        run: echo "::set-output name=sdk_versions::${{ github.event.inputs.version }}"
+
+    outputs:
+      sdk_versions: ${{ steps.find_new_tags.outputs.sdk_versions }}
+
+  build_nodejs_sdk:
+    needs: find_new_tags
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.find_new_tags.outputs.sdk_versions) }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: crd2pulumi-install
+        run: brew install pulumi/tap/crd2pulumi
+      - name: crd2pulumi-generate-sdk
+        run: |
+          IFS='|' read -r -a build_parts <<< "${{ matrix.version }}"
+          mkdir -p ./_work/{clone,output}
+          git clone ${build_parts[1]} ./_work/clone
+          cd ./_work/clone
+          git checkout ${build_parts[3]}
+          crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ../output ./${build_parts[2]}/*.yaml --force
+
+          # Fix Package Name
+          sed -ie "s#@pulumi/${build_parts[0]}#@pulumi-packs/${build_parts[0]}#g" ../output/package.json
+
+          # Fix Package Version
+          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[3]}\"#g" ../output/package.json
+      - run: npm publish --access=public
+        working-directory: ./_work/output
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
