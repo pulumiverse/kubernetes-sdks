@@ -42,7 +42,7 @@ jobs:
         run: brew install pulumi/tap/crd2pulumi
       - name: crd2pulumi-generate-sdk
         run: |
-          IFS='|' read -r -a build_parts <<< "${{ version }}"
+          IFS='|' read -r -a build_parts <<< "${{ matrix.version }}"
           mkdir -p ./_work/{clone,output}
           git clone ${build_parts[2]} ./_work/clone
           cd ./_work/clone
