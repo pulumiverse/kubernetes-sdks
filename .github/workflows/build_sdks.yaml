@@ -42,15 +42,19 @@ jobs:
         run: brew install pulumi/tap/crd2pulumi
       - name: crd2pulumi-generate-sdk
         run: |
-          IFS='|' read -r -a build_parts <<< "${version}"
-          mkdir -p _work/${build_parts[1]}/{clone,output}
-          git clone ${build_parts[2]} ./_work/${build_parts[1]}/clone
-          cd ./_work/${build_parts[1]}/clone
+          IFS='|' read -r -a build_parts <<< "${{ version }}"
+          mkdir -p ./_work/{clone,output}
+          git clone ${build_parts[2]} ./_work/clone
+          cd ./_work/clone
           git checkout ${build_parts[4]}
           crd2pulumi --nodejsName ${build_parts[1]} --nodejsPath ../output ./${build_parts[3]}/*.yaml --force
 
           # Fix Package Name
-          sed -ie "s#@pulumi/${build_parts[1]}#@pulumiverse/${build_parts[1]}#g" ../output/package.json
+          sed -ie "s#@pulumi/${build_parts[1]}#@pulumi-packs/${build_parts[1]}#g" ../output/package.json
 
           # Fix Package Version
           sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[4]}\"#g" ../output/package.json
+      - run: npm publish
+        working-directory: ./_work/output
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
