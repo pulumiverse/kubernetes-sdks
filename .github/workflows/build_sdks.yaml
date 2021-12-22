@@ -23,7 +23,7 @@ jobs:
       - name: poetry-install
         run: poetry install
 
-      - name: find_new_tags
+      - id: find_new_tags
         run: echo "::set-output name=sdk_versions::$(poetry run python ./bin/find-new-tags.py)"
 
     outputs:
