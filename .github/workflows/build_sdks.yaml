@@ -20,6 +20,9 @@ jobs:
         with:
           poetry-version: 1.1.12
 
+      - name: poetry-install
+        run: poetry install
+
       - name: find_new_tags
         run: echo "::set-output name=matrix::$(poetry run python ./bin/find-new-tags.py)"
 
