@@ -1,3 +1,7 @@
+- name: argocd
+  repository: https://github.com/argoproj/argo-cd
+  directory: manifests/crds
+
 - name: cert-manager
   repository: https://github.com/jetstack/cert-manager
   directory: deploy/crds
