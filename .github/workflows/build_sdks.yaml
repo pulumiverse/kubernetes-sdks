@@ -38,6 +38,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - name: crd2pulumi-install
         run: brew install pulumi/tap/crd2pulumi
       - name: crd2pulumi-generate-sdk
