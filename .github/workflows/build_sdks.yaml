@@ -1,7 +1,12 @@
 name: Build SDKs
 
 on:
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      since_hours:
+        description: How many hours to look for releases?
+        required: true
+
   schedule:
     - cron: "10 3,15 * * *"
 
@@ -24,7 +29,7 @@ jobs:
         run: poetry install
 
       - id: find_new_tags
-        run: echo "::set-output name=sdk_versions::$(poetry run python ./bin/find-new-tags.py)"
+        run: echo "::set-output name=sdk_versions::$(poetry run python ./bin/find-new-tags.py ${{ github.event.inputs.since_hours }})"
 
     outputs:
       sdk_versions: ${{ steps.find_new_tags.outputs.sdk_versions }}

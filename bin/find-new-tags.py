@@ -4,6 +4,7 @@ from json import dumps
 from requests import get as httpget
 from typing import List, Optional, TypedDict
 from yaml import safe_load, YAMLError
+import sys
 
 
 class Sdk(TypedDict):
@@ -15,7 +16,9 @@ class Sdk(TypedDict):
 def has_been_updated(updated_at: Optional[datetime] = None) -> bool:
     if updated_at == None:
         return False
-    return (datetime.now(timezone.utc) - updated_at) < timedelta(hours=12)
+    hours_since = sys.argv[1] if len(sys.argv) > 1 else '12'
+
+    return (datetime.now(timezone.utc) - updated_at) < timedelta(hours=hours_since)
 
 
 def get_new_tags(sdk: Sdk) -> List[str]:
