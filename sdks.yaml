@@ -5,3 +5,7 @@
 - name: cert-manager
   repository: https://github.com/jetstack/cert-manager
   directory: deploy/crds
+
+- name: crossplane
+  repository: https://github.com/crossplane/crossplane
+  directory: cluster/crds
