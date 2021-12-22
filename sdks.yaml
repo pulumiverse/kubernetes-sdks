@@ -9,3 +9,7 @@
 - name: crossplane
   repository: https://github.com/crossplane/crossplane
   directory: cluster/crds
+
+- name: crossplane-aws
+  repository: https://github.com/crossplane/provider-aws
+  directory: package/crds
