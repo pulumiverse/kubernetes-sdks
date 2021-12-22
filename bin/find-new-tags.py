@@ -16,7 +16,7 @@ class Sdk(TypedDict):
 def has_been_updated(updated_at: Optional[datetime] = None) -> bool:
     if updated_at == None:
         return False
-    hours_since = sys.argv[1] if len(sys.argv) > 1 else '12'
+    hours_since: int = int(sys.argv[1]) if len(sys.argv) > 1 else 12
 
     return (datetime.now(timezone.utc) - updated_at) < timedelta(hours=hours_since)
 
