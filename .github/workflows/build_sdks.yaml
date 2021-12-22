@@ -44,16 +44,16 @@ jobs:
         run: |
           IFS='|' read -r -a build_parts <<< "${{ matrix.version }}"
           mkdir -p ./_work/{clone,output}
-          git clone ${build_parts[2]} ./_work/clone
+          git clone ${build_parts[1]} ./_work/clone
           cd ./_work/clone
-          git checkout ${build_parts[4]}
-          crd2pulumi --nodejsName ${build_parts[1]} --nodejsPath ../output ./${build_parts[3]}/*.yaml --force
+          git checkout ${build_parts[3]}
+          crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ../output ./${build_parts[2]}/*.yaml --force
 
           # Fix Package Name
-          sed -ie "s#@pulumi/${build_parts[1]}#@pulumi-packs/${build_parts[1]}#g" ../output/package.json
+          sed -ie "s#@pulumi/${build_parts[0]}#@pulumi-packs/${build_parts[0]}#g" ../output/package.json
 
           # Fix Package Version
-          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[4]}\"#g" ../output/package.json
+          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[3]}\"#g" ../output/package.json
       - run: npm publish
         working-directory: ./_work/output
         env:
