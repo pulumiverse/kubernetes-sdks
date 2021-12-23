@@ -29,7 +29,7 @@ jobs:
         run: poetry install
 
       - id: find_new_tags
-        run: echo "::set-output name=sdk_versions::[\"${{ github.event.inputs.version }}\"]"
+        run: echo "::set-output name=sdk_versions::[\"$(poetry run python ./bin/get-sdk-version.py ${{ github.event.inputs.sdk }} ${{ github.event.inputs.version }})\"]"
 
     outputs:
       sdk_versions: ${{ steps.find_new_tags.outputs.sdk_versions }}
