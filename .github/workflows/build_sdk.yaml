@@ -3,6 +3,9 @@ name: Build SDK
 on:
   workflow_dispatch:
     inputs:
+      sdk:
+        description: Which SDK?
+        required: true
       version:
         description: Which version?
         required: true
@@ -48,16 +51,16 @@ jobs:
       - name: crd2pulumi-generate-sdk
         run: |
           IFS='|' read -r -a build_parts <<< "${{ matrix.version }}"
-          mkdir -p ./_work/{clone,output}
+          mkdir -p ./_output
           curl -fsSL -o crd.yaml https://doc.crds.dev/raw/${build_parts[1]}@${build_parts[2]}
-          crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ../output ./crd.yaml --force
+          crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ./_output ./crd.yaml --force
 
           # Fix Package Name
-          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/${build_parts[0]}#g" ../output/package.json
+          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/${build_parts[0]}#g" ./_output/package.json
 
           # Fix Package Version
-          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[2]}\"#g" ../output/package.json
+          sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[2]}\"#g" ./_output/package.json
       - run: npm publish --access=public
-        working-directory: ./_work/output
+        working-directory: ./_output
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
