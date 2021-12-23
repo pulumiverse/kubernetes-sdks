@@ -1,15 +1,3 @@
-- name: argocd
-  repository: https://github.com/argoproj/argo-cd
-  directory: manifests/crds
-
-- name: cert-manager
-  repository: https://github.com/jetstack/cert-manager
-  directory: deploy/crds
-
-- name: crossplane
-  repository: https://github.com/crossplane/crossplane
-  directory: cluster/crds
-
-- name: crossplane-aws
-  repository: https://github.com/crossplane/provider-aws
-  directory: package/crds
+argocd: github.com/argoproj/argo-cd
+cert-manager: github.com/jetstack/cert-manager
+crossplane: github.com/crossplane/crossplane
