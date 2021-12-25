@@ -1,3 +1,4 @@
 argocd: github.com/argoproj/argo-cd
 cert-manager: github.com/jetstack/cert-manager
 crossplane: github.com/crossplane/crossplane
+knative: github.com/knative/operator
