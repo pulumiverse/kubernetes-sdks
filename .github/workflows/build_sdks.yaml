@@ -37,6 +37,7 @@ jobs:
   build_nodejs_sdk:
     needs: find_new_tags
     runs-on: ubuntu-latest
+    if: ${{ needs.find_new_tags.outputs.sdk_versions != '[]' && needs.find_new_tags.outputs.sdk_versions != '' }}
     strategy:
       matrix:
         version: ${{ fromJson(needs.find_new_tags.outputs.sdk_versions) }}
