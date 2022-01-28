@@ -1,5 +1,6 @@
 argocd: github.com/argoproj/argo-cd
 cert-manager: github.com/jetstack/cert-manager
+contour: github.com/projectcontour/contour
 crossplane: github.com/crossplane/crossplane
 istio: github.com/istio/istio
 knative: github.com/knative/operator
