@@ -5,3 +5,4 @@ crossplane: github.com/crossplane/crossplane
 istio: github.com/istio/istio
 knative: github.com/knative/operator
 redpanda: github.com/vectorizedio/redpanda
+tyk: github.com/TykTechnologies/tyk-operator
