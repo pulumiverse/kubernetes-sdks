@@ -61,6 +61,10 @@ jobs:
 
           # Fix Package Version
           sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[2]}\"#g" ./_output/package.json
+
+          # Compile TSC to JS
+          cd _output && npm install --no-save @types/node @pulumi/pulumi @pulumi/kubernetes && npm run build
+          cp _output/{package.json,README.md} _output/bin/
       - run: npm publish --access=public
         working-directory: ./_output
         env:
