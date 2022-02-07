@@ -57,13 +57,13 @@ jobs:
           crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ./_output ./crd.yaml --force
 
           # Fix Package Name
-          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/${build_parts[0]}#g" ./_output/package.json
+          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/kubernetes-${build_parts[0]}#g" ./_output/package.json
 
           # Fix Package Version
           sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[2]}\"#g" ./_output/package.json
 
           # Compile TSC to JS
-          cd _output && npm install --no-save @types/node @pulumi/pulumi @pulumi/kubernetes && npm run build
+          (cd _output && npm install --no-save @types/node @pulumi/pulumi @pulumi/kubernetes && npm run build)
           cp _output/{package.json,README.md} _output/bin/
       - run: npm publish --access=public
         working-directory: ./_output
