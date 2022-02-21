@@ -56,7 +56,7 @@ jobs:
           crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ./_output ./crd.yaml --force
 
           # Fix Package Name
-          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/kube-${build_parts[0]}#g" ./_output/package.json
+          sed -ie "s#@pulumi/${build_parts[0]}#@pulumiverse/kubernetes-${build_parts[0]}#g" ./_output/package.json
 
           # Fix Package Version
           sed -ie "s#\"version\": \"\"#\"version\": \"${build_parts[2]}\"#g" ./_output/package.json
