@@ -3,6 +3,7 @@ cert-manager: github.com/jetstack/cert-manager
 contour: github.com/projectcontour/contour
 crossplane: github.com/crossplane/crossplane
 istio: github.com/istio/istio
+kong-ingress: github.com/Kong/kubernetes-ingress-controller
 knative: github.com/knative/operator
 redpanda: github.com/vectorizedio/redpanda
 tyk: github.com/TykTechnologies/tyk-operator
