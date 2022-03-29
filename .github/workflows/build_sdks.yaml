@@ -47,13 +47,15 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
+      - name: poetry-install
+        run: poetry install
       - name: crd2pulumi-install
         run: brew install pulumi/tap/crd2pulumi
       - name: crd2pulumi-generate-sdk
         run: |
           IFS='|' read -r -a build_parts <<< "${{ matrix.version }}"
           mkdir -p ./_output
-          curl -fsSL -o crd.yaml https://doc.crds.dev/raw/${build_parts[1]}@${build_parts[2]}
+          poetry run python ./bin/download-crds.py ${build_parts[0]} ${build_parts[2]}
           crd2pulumi --nodejsName ${build_parts[0]} --nodejsPath ./_output ./crd.yaml --force
 
           # Fix Package Name

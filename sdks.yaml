@@ -1,9 +1,35 @@
-argocd: github.com/argoproj/argo-cd
-cert-manager: github.com/jetstack/cert-manager
-contour: github.com/projectcontour/contour
-crossplane: github.com/crossplane/crossplane
-istio: github.com/istio/istio
-kong-ingress: github.com/Kong/kubernetes-ingress-controller
-knative: github.com/knative/operator
-redpanda: github.com/vectorizedio/redpanda
-tyk: github.com/TykTechnologies/tyk-operator
+argocd:
+  repository: github.com/argoproj/argo-cd
+  crds:
+    - https://raw.githubusercontent.com/argoproj/argo-cd/${VERSION}/manifests/crds/application-crd.yaml
+    - https://raw.githubusercontent.com/argoproj/argo-cd/${VERSION}/manifests/crds/appproject-crd.yaml
+
+cert-manager:
+  repository: github.com/jetstack/cert-manager
+  crds:
+    - https://github.com/cert-manager/cert-manager/releases/download/${VERSION}/cert-manager.crds.yaml
+
+contour:
+  repository: github.com/projectcontour/contour
+  crds:
+    - https://raw.githubusercontent.com/projectcontour/contour-operator/${VERSION}/examples/operator/operator.yaml
+
+kong-ingress:
+  repository: github.com/Kong/kubernetes-ingress-controller
+  crds:
+    - https://raw.githubusercontent.com/Kong/kubernetes-ingress-controller/${VERSION}/deploy/single/all-in-one-dbless.yaml
+
+knative:
+  repository: github.com/knative/operator
+  crds:
+    - https://github.com/knative/operator/releases/download/${VERSION}/operator.yaml
+
+redpanda:
+  repository: github.com/vectorizedio/redpanda
+  crds:
+    - https://github.com/redpanda-data/redpanda/${VERSION}/src/go/k8s/config/crd/bases/redpanda.vectorized.io_clusters.yaml
+
+tyk:
+  repository: github.com/TykTechnologies/tyk-operator
+  crds:
+    - https://raw.githubusercontent.com/TykTechnologies/tyk-operator/${VERSION}/helm/crds/crds.yaml

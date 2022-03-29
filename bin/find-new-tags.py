@@ -2,7 +2,7 @@ from atoma import parse_atom_bytes
 from datetime import datetime, timedelta, timezone
 from json import dumps
 from requests import get as httpget
-from typing import List, Mapping, Optional
+from typing import List, Optional
 from yaml import safe_load, YAMLError
 import sys
 
@@ -24,14 +24,14 @@ def get_new_tags(repository: str) -> List[str]:
 
 with open("./sdks.yaml", "r") as stream:
     try:
-        sdks: Mapping[str, str] = safe_load(stream)
+        sdks = safe_load(stream)
     except YAMLError as exc:
         print(f"Error parsing SDK Yaml: {exc}")
 
 sdks_to_build: List[str] = []
-for name, repository in sdks.items():
-    for tag in get_new_tags(repository):
+for name, details in sdks.items():
+    for tag in get_new_tags(details['repository']):
         sdks_to_build.append(
-            f'{name}|{repository}|{tag}')
+            f'{name}|{details["repository"]}|{tag}')
 
 print(dumps(sdks_to_build))
