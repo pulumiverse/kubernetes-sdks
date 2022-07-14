@@ -33,3 +33,8 @@ tyk:
   repository: github.com/TykTechnologies/tyk-operator
   crds:
     - https://raw.githubusercontent.com/TykTechnologies/tyk-operator/${VERSION}/helm/crds/crds.yaml
+
+flux:
+  repository: github.com/fluxcd/flux2
+  crds:
+    - https://github.com/fluxcd/flux2/releases/download/${VERSION}/manifests.tar.gz
